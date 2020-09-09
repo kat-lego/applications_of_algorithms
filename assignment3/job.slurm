@@ -31,4 +31,4 @@ echo ------------------------------------------------------
 cd $SLURM_SUBMIT_DIR
 make clean
 make 
-./bin/program
+./program.o
