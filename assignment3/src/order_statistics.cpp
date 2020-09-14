@@ -3,11 +3,11 @@
 #include <random>
 #include <math.h>
 
-#define GSIZE 5.0 //number of elements in a group for the deterministic 
+#define GSIZE 5.0 //number of elements in a group for the deterministic
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//                           RANDOMIZED SELECT  Í                             //
+//                           RANDOMIZED SELECT                                //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -16,7 +16,12 @@ int randomized_select(int* arr, int a, int b, int i){
         return arr[a];
     }
 
-    int p = randomized_partition(arr, a, b);
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 generator(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> distribution(a, b);
+    int r = distribution(generator); //the random pivot's index
+
+    int p = partition(arr, a, b, r);
     int k = p-a+1;
 
     if(i == k)return arr[p];
@@ -25,34 +30,9 @@ int randomized_select(int* arr, int a, int b, int i){
 }
 
 
-int randomized_partition(int* arr, int a,int b){
-
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 generator(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> distribution(a, b);
-    int r = distribution(generator); //the random pivot's index
-
-    swap(arr[r], arr[b]);
-
-    int i, j;
-
-    int x = arr[b];
-
-    i=a-1;
-    for(j=a; j<b; j++){
-        if(arr[j]<=x){
-            i++;
-            swap(arr[i], arr[j]);
-        }
-    }
-    swap(arr[i+1], arr[b]);
-    return i+1;
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//                          DETERMINISTIC SELECT  Í                           //
+//                          DETERMINISTIC SELECT                              //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -60,7 +40,7 @@ int deterministic_select(int* arr, int a, int b, int i){
     if(a==b){
         return arr[a];
     }
-    
+
     int num_groups = ceil( (b-a+1)/GSIZE );
     int* medians = new int[num_groups];
     get_medians(arr, medians, a, b);
@@ -68,7 +48,10 @@ int deterministic_select(int* arr, int a, int b, int i){
     int medOfmed = deterministic_select(medians, 0, num_groups-1, med);
     delete[] medians;
 
-    int p = deterministic_partition(arr, a, b, medOfmed);
+    int r=a;
+    while(r<=b && arr[r]!=medOfmed)r++;
+
+    int p = partition(arr, a, b, r);
     int k = p-a+1;
 
     if(i == k)return arr[p];
@@ -94,25 +77,28 @@ void get_medians(int* arr, int* medians, int a, int b){
 }
 
 void insertion_sort(int* arr,int a, int b){
-    
-    int key, j;  
-    for (int i = a+1; i <= b; i++){  
-        key = arr[i];  
-        j = i-1;  
 
-        while (j >= a && arr[j] > key){  
-            arr[j+1] = arr[j];  
-            j = j-1;  
-        }  
-        arr[j+1] = key;  
-    }  
+    int key, j;
+    for (int i = a+1; i <= b; i++){
+        key = arr[i];
+        j = i-1;
+
+        while (j >= a && arr[j] > key){
+            arr[j+1] = arr[j];
+            j = j-1;
+        }
+        arr[j+1] = key;
+    }
 
 }
 
-int deterministic_partition(int* arr, int a,int b, int p){
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                              SOME UTILITIES                                //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
-    int r=a;
-    while(r<=b && arr[r]!=p)r++;
+int partition(int* arr, int a,int b, int r){
 
     swap(arr[r], arr[b]);
 
@@ -131,12 +117,6 @@ int deterministic_partition(int* arr, int a,int b, int p){
     return i+1;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//                              SOME UTILITIES                                //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
-
 void swap(int& a, int& b){
     int buf = a;
     a = b;
@@ -152,7 +132,7 @@ void random_shuffle(int* buf, int a, int b){
 
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 generator(rd()); //Standard mersenne_twister_engine seeded with rd()
-    
+
     for(int i=a;i<=b;i++){
         std::uniform_int_distribution<> distribution(i, b);
 
