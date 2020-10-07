@@ -23,8 +23,10 @@ public:
     void print_node();
 
     ~rb_node() {
-        delete left;
-        delete right;
+        if(this->left != NIL)
+            delete left;
+        if(this->right != NIL)
+            delete right;
     }
 };
 
@@ -37,7 +39,7 @@ public:
     void left_rotate(rb_node* x);
     void right_rotate(rb_node* x);
     void rb_delete(int value);
-    void transplant(rb_node* u, rb_node* v);
+    void rb_transplant(rb_node* u, rb_node* v);
     rb_node* binary_search(int v);
     rb_node* minimum(rb_node* subtree);
     void rb_delete_fixup(rb_node* x);
@@ -46,7 +48,8 @@ public:
     void print();
 
     ~rb_tree(){
-        delete root;
+        if(root!=rb_node::NIL)
+            delete root;
     }
 
 };

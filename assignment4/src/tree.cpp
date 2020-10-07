@@ -112,13 +112,15 @@ void rb_tree::rb_insert_fixup(rb_node* z){
     root->color = BLACK;
 }
 
-void rb_tree::transplant(rb_node* u, rb_node* v){
+void rb_tree::rb_transplant(rb_node* u, rb_node* v){
     if(u->parent == rb_node::NIL)
         root = v;
     else if(u == u->parent->left)
         u->parent->left = v;
     else u->parent->right = v;
     v->parent = u->parent;
+    u->left = rb_node::NIL;
+    u->right = rb_node::NIL;
 }
 
 rb_node* rb_tree::binary_search(int v){
@@ -135,7 +137,8 @@ rb_node* rb_tree::binary_search(int v){
 }
 
 rb_node* rb_tree::minimum(rb_node* subtree){
-     
+    while (subtree->left != rb_node::NIL)subtree = subtree->left;
+    return subtree;
 }
 
 void rb_tree::rb_delete(int value){
@@ -146,10 +149,10 @@ void rb_tree::rb_delete(int value){
 
     if(z->left == rb_node::NIL){
         x = z->right;
-        transplant(z, z->right);
+        rb_transplant(z, z->right);
     }else if(z->right == rb_node::NIL){
         x = z->left;
-        transplant(z, z->left);
+        rb_transplant(z, z->left);
     }else{
         y = minimum(z->right);
         yog = y->color;
@@ -157,22 +160,79 @@ void rb_tree::rb_delete(int value){
         if(y->parent == z)
             x->parent = y;
         else{
-            transplant(y, y->right);
+            rb_transplant(y, y->right);
             y->right = z->right;
             y->right->parent = y;
         }
-        transplant(z,y);
+        rb_transplant(z,y);
         y->left = z->left;
         y->left->parent = y;
         y->color = z->color;
     }
 
+    delete z;
+
     if(yog == BLACK)
         rb_delete_fixup(x);        
 }
 
-void rb_delete_fixup(rb_node* x){
-    
+void rb_tree::rb_delete_fixup(rb_node* x){
+    rb_node* w;
+    while(x != root && x->color == BLACK && x!=rb_node::NIL){
+        if(x == x->parent->left){
+            w = x->parent->right;
+
+            if(w->color == RED){
+                w->color = BLACK;
+                x->parent->color = RED;
+                left_rotate(x->parent);
+                w = x->parent->right;
+            }
+
+            if(w->left->color == BLACK && w->right->color == BLACK){
+                w->color = RED;
+                x = x->parent;
+            }else if(w->right->color == BLACK){
+                w->left->color = BLACK;
+                w->color = RED;
+                right_rotate(w);
+                w = x->parent->right;
+            }
+
+            w->color = x->parent->color;
+            x->parent->color = BLACK;
+            w->right->color = BLACK;
+            left_rotate(x->parent);
+            x = root;
+        }else{
+            w = x->parent->left;
+
+            if(w->color == RED){
+                w->color = BLACK;
+                x->parent->color = RED;
+                right_rotate(x->parent);
+                w = x->parent->left;
+            }
+
+            if(w->right->color == BLACK && w->left->color == BLACK){
+                w->color = RED;
+                x = x->parent;
+            }else if(w->left->color == BLACK){
+                w->right->color = BLACK;
+                w->color = RED;
+                left_rotate(w);
+                w = x->parent->left;
+            }
+
+            w->color = x->parent->color;
+            x->parent->color = BLACK;
+            w->left->color = BLACK;
+            right_rotate(x->parent);
+            x = root;
+        }
+    }
+
+    x->color = BLACK;
 }
 
 
@@ -189,7 +249,8 @@ void rb_tree::print(rb_node* subtree){
 }
 
 void rb_node::print_node(){
-    cout<<"("<<value<<", "<<color<<") ";
+    string c = color?"B":"R";
+    cout<<"("<<value<<", "<<c<<") ";
 }
 
 
