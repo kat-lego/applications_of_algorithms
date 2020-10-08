@@ -21,6 +21,7 @@ private:
     void build_tree(int* in_array, rb_tree* tree, int n);
     void init_array(int* arr, int n);
     void shuffle_array(int* arr, int a, int b);
+    int rand(int a, int b);
 
 };
 

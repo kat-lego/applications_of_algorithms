@@ -126,10 +126,8 @@ void rb_tree::rb_transplant(rb_node* u, rb_node* v){
 rb_node* rb_tree::binary_search(int v){
     rb_node* x = root;
 
-    while(x!=rb_node::NIL){
-        if(v == x->value)
-            return x;     
-        else if( v < x->value)
+    while(x!=rb_node::NIL && v!=x->value){
+        if( v < x->value)
             x = x->left;
         else x = x->right;
     }
@@ -142,7 +140,9 @@ rb_node* rb_tree::minimum(rb_node* subtree){
 }
 
 void rb_tree::rb_delete(int value){
+    if(root == rb_node::NIL)return;
     rb_node* z = binary_search(value);
+    if(z == rb_node::NIL)return;
     rb_node* y = z;
     rb_node* x;
     int yog = y->color;
@@ -234,7 +234,6 @@ void rb_tree::rb_delete_fixup(rb_node* x){
 
     x->color = BLACK;
 }
-
 
 void rb_tree::print(){
     print(root);
