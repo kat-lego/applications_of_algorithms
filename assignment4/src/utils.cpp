@@ -37,9 +37,9 @@ void simulation::build_tree_sim(){
     int n = step_size;
     int* input_array = new int[datapoints*step_size];
     init_array(input_array, datapoints*step_size);
-    cout<<"shuffling"<<endl;
+    // cout<<"shuffling"<<endl;
     shuffle_array(input_array, 0, datapoints*step_size-1);
-    cout<<"shuffling done"<<endl;
+    // cout<<"shuffling done"<<endl;
     double time = 0;
     double time1 = 0;
     double time2 = 0;
@@ -55,12 +55,12 @@ void simulation::build_tree_sim(){
             time += duration_cast<milliseconds>(end-start).count();
 
             start = high_resolution_clock::now();
-            tree->rb_insert(0);
+            tree->rb_insert(r);
             end = high_resolution_clock::now();
             time1 += duration_cast<nanoseconds>(end-start).count();
 
             start = high_resolution_clock::now();
-            tree->rb_delete(0);
+            tree->rb_delete(r);
             end = high_resolution_clock::now();
             time2 += duration_cast<nanoseconds>(end-start).count();
 
