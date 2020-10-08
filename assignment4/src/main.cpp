@@ -8,9 +8,9 @@ int main(int argc, char* argv[]){
     int d,r,s;
     
     if(argc == 1){
-        d = 50;
-        r = 20;
-        s = 20000;
+        d = 25;
+        r = 30;
+        s = 30000;
     }else if(argc == 4){
         d = atoi(argv[1]);
         r = atoi(argv[2]);
@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
         cout<<"invalid arguments"<<endl;
         exit(0);
     }
-    
+
     simulation sim = simulation(d, r, s);
     sim.build_tree_sim();
 }

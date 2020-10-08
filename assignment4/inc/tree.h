@@ -10,8 +10,8 @@ using namespace std;
 
 class rb_node{
 public:    
-    static rb_node* const NIL;
     
+    static rb_node* const NIL;
     rb_node* left = NIL;
     rb_node* right = NIL;
     rb_node* parent = NIL;
