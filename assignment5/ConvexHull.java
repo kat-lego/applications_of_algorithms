@@ -115,14 +115,16 @@ public class ConvexHull {
                 Point[] points = Point.genRandomPoints(n);
 
                 start = System.nanoTime();
-                ArrayList<Point> hull = GrahamScan(points);
-                end = System.nanoTime();
-                time1 += end - start;
-
-                start = System.nanoTime();
                 ArrayList<Point> hull2 = JarvisMarch(points);
                 end = System.nanoTime();
                 time2 += end - start;
+
+                start = System.nanoTime();
+                ArrayList<Point> hull = GrahamScan(points);
+                end = System.nanoTime();
+                time1 += end - start;
+                
+                if(hull2.size()>n/2)System.out.println("hull big");
 
                 time3 += (double)(end - start)/hull2.size();
             }
@@ -185,8 +187,8 @@ class Point{
         double x, y;
 
         for(int i=0;i<n;i++){
-            x = (rand.nextDouble() - rand.nextDouble())*1000;
-            y = (rand.nextDouble() - rand.nextDouble())*1000;
+            x = (rand.nextDouble() - rand.nextDouble())*10000;
+            y = (rand.nextDouble() - rand.nextDouble())*10000;
             points[i] = new Point(x, y);
         }
 
