@@ -4,7 +4,7 @@ main:
 	$(CC) ConvexHull.java
 
 run:
-	java ConvexHull 40 30000 20
+	java ConvexHull 40 40000 20
 
 clean:
 	rm *.class
