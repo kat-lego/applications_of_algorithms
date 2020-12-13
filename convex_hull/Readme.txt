@@ -1,4 +1,7 @@
 +-------------------------------------------------------+
+| * Code for Convex Hull using jarvis march and         |
+|   Graham scan                                         |
+|                                                       |
 | * The CODE                                            |
 |   - ConvexHull.java: contains all the code            |
 |                                                       |

@@ -1,4 +1,7 @@
 +-------------------------------------------------------+
+| * Code testing performace of red black trees insert   |
+|   and delete operations                               |
+|                                                       |
 | * The CODE                                            |
 |   - src/tree.cpp: contains the red black              |
 |     tree operations                                   |
